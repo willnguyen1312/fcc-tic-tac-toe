@@ -1,0 +1,33 @@
+body {
+  text-align: center;
+}
+
+.board {
+  display: inline-block;
+  font-size: 3em;
+}
+
+.field {
+  text-align: center;
+  width: 2em;
+  height: 2em;
+  line-height: 2;
+  float: left;
+}
+
+.field:nth-child(3n + 1) {
+  clear: both;
+}
+
+.field:nth-child(5),
+.field:nth-child(6n + 2) {
+  border-left: 3px solid black;
+  border-right: 3px solid black;
+}
+
+.field:nth-child(5),
+.field:nth-child(4),
+.field:nth-child(6) {
+  border-top: 3px solid black;
+  border-bottom: 3px solid black;
+}
