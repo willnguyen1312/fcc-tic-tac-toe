@@ -4,8 +4,11 @@
   "private": true,
   "homepage": "https://willnguyen1312.github.io/fcc-tic-tac-toe",
   "dependencies": {
+    "bootstrap": "^3.3.7",
     "prop-types": "^15.6.1",
+    "ramda": "^0.25.0",
     "react": "^16.2.0",
+    "react-bootstrap": "^0.32.1",
     "react-dom": "^16.2.0",
     "react-scripts": "1.1.1"
   },

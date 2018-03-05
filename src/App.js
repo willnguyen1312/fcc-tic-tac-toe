@@ -1,15 +1,19 @@
 /* eslint react/jsx-no-target-blank: 0 */
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
+import { Button } from 'react-bootstrap'
+import { clone } from 'ramda'
 import Info from './components/Info'
 import Field from './components/Field'
 import Footer from './components/Footer'
+import PickTypeModal from './components/PickTypeModal'
 import './App.css'
 
 /** ***** SIMPLE LOGIC ******* */
 
 // initial state of the board
 let fields = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+const original = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
 
 function checkMove(rowNum, colNum, info) {
   // if the game is over, start again
@@ -56,7 +60,7 @@ function checkMove(rowNum, colNum, info) {
     // if there are no empty fields, end the game
   } else {
     const subinfor = 'Game Over'
-    return { fields, subinfor }
+    return { fields, info: subinfor }
   }
   return { fields, info }
 }
@@ -64,13 +68,34 @@ function checkMove(rowNum, colNum, info) {
 /** **************** RENDERING VIEW WITH REACT ************************* */
 
 class App extends Component {
-  state = { fields: this.props.fields, info: '' }
+  state = {
+    fields: this.props.fields,
+    info: '',
+    showModal: true,
+    userPick: 'X',
+    botPick: 'O',
+  }
 
   onFieldClicked = (e) => {
     const rowNum = +e.target.id[0]
     const colNum = +e.target.id[1]
     const retVal = checkMove(rowNum, colNum, this.state.info)
     this.setState({ fields: retVal.fields, info: retVal.info })
+  }
+
+  smClose = ({ userPick, botPick }) => {
+    this.setState({
+      showModal: false,
+      userPick,
+      botPick,
+    })
+  }
+  handlePickAgain = () => {
+    fields = clone(original)
+    this.setState({
+      showModal: true,
+      fields: clone(original),
+    })
   }
 
   render = () => {
@@ -82,8 +107,8 @@ class App extends Component {
         const colNum = index
         const id = rowNum.toString() + colNum.toString()
         if (val === 0) value = ''
-        else if (val === 1) value = 'x'
-        else value = 'o'
+        else if (val === 1) value = this.state.userPick
+        else value = this.state.botPick
         const ele = (
           <Field key={id} id={id} onClick={this.onFieldClicked}>
             {value}
@@ -98,6 +123,7 @@ class App extends Component {
         <div className="board">
           {subFields}
           <Info>{this.state.info}</Info>
+          <Button onClick={this.handlePickAgain}>Pick Again</Button>
           <Footer>
             Made by{' '}
             <a target="_blank" href="http://namnguyen.design">
@@ -110,6 +136,7 @@ class App extends Component {
             </a>
           </Footer>
         </div>
+        <PickTypeModal show={this.state.showModal} onHide={this.smClose} />
       </Fragment>
     )
   }
